@@ -1,25 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import { Container } from "semantic-ui-react";
 
-function App() {
+import { AuthProvider } from "./context/auth";
+import AuthRoute from "./util/AuthRoute";
+
+import Home from "./component/pages/Home";
+import Login from "./component/pages/Login";
+import Register from "./component/pages/Register";
+import Menubar from "./component/Menubar";
+
+import "semantic-ui-css/semantic.min.css";
+import "./App.css";
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AuthProvider>
+      <Router>
+        <Container>
+          <Menubar />
+          <Route exact path="/" component={Home} />
+          <AuthRoute exact path="/Login" component={Login} />
+          <AuthRoute exact path="/Register" component={Register} />
+        </Container>
+      </Router>
+    </AuthProvider>
   );
-}
+};
 
 export default App;
