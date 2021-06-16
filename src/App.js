@@ -9,6 +9,7 @@ import Home from "./component/pages/Home";
 import Login from "./component/pages/Login";
 import Register from "./component/pages/Register";
 import Menubar from "./component/Menubar";
+import AddPost from "./component/pages/AddPost";
 
 import "semantic-ui-css/semantic.min.css";
 import "./App.css";
@@ -22,6 +23,7 @@ const App = () => {
           <Route exact path="/" component={Home} />
           <AuthRoute exact path="/Login" component={Login} />
           <AuthRoute exact path="/Register" component={Register} />
+          <Route exact path="/AddPost" component={AddPost} />
         </Container>
       </Router>
     </AuthProvider>

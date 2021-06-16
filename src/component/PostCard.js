@@ -7,6 +7,7 @@ const PostCard = ({
   post: {
     title,
     caption,
+    image,
     createdAt,
     id,
     username,
@@ -35,10 +36,13 @@ const PostCard = ({
         <Card.Meta>{moment(createdAt).fromNow(true)}</Card.Meta>
         <Card.Description>
           <p>
-            <strong>{title}</strong>
+            <Image src={image} size="medium" />
           </p>
-          <br />
-          {caption}
+          <p style={{ marginTop: 20 }}>
+            <strong style={{ color: "teal" }}>{title}</strong>
+            <br />
+            {caption}
+          </p>
         </Card.Description>
       </Card.Content>
       <Card.Content extra>

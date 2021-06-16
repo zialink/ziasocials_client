@@ -1,11 +1,17 @@
-import React from "react";
-import { useQuery, gql } from "@apollo/client";
+import React, { useState, useEffect } from "react";
+import { useQuery } from "@apollo/client";
 import { Grid } from "semantic-ui-react";
 
 import PostCard from "../PostCard";
+import { FETCH_POSTS_QUERY } from "../../util/graphql";
 
 const Home = () => {
+  const [postData, setPostData] = useState({});
   const { loading, error, data } = useQuery(FETCH_POSTS_QUERY);
+
+  useEffect(() => {
+    data && setPostData(data);
+  }, [data]);
   return (
     <Grid columns={3}>
       <Grid.Row className="page-title">
@@ -16,8 +22,8 @@ const Home = () => {
         {loading ? (
           <h1>Loading Posts...</h1>
         ) : (
-          data.getPosts &&
-          data.getPosts.map((post) => (
+          postData.getPosts &&
+          postData.getPosts.map((post) => (
             <Grid.Column key={post.id} style={{ marginBottom: 20 }}>
               <PostCard post={post} />
             </Grid.Column>
@@ -27,28 +33,5 @@ const Home = () => {
     </Grid>
   );
 };
-
-const FETCH_POSTS_QUERY = gql`
-  {
-    getPosts {
-      id
-      title
-      caption
-      createdAt
-      username
-      likeCount
-      commentCount
-      likes {
-        username
-      }
-      comments {
-        id
-        username
-        createdAt
-        body
-      }
-    }
-  }
-`;
 
 export default Home;

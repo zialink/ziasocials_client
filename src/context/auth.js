@@ -49,6 +49,13 @@ function AuthProvider(props) {
     });
   }
 
+  /*   function createPost(postData) {
+    dispatch({
+      type: "CREATE_POST",
+      payload: postData,
+    });
+  } */
+
   function logout() {
     localStorage.removeItem("jwtToken");
     dispatch({

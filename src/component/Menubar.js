@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Menu } from "semantic-ui-react";
+import { Menu, Button } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
 import { AuthContext } from "../context/auth";
@@ -23,6 +23,20 @@ const Menubar = () => {
           as={Link}
           to="/"
         />
+
+        <Menu.Menu position="right">
+          <Menu.Item
+            name="createPost"
+            onClick={handleItemClick}
+            as={Link}
+            to="/addPost"
+          >
+            <Button animated="fade" color="teal">
+              <Button.Content visible>Add Post</Button.Content>
+              <Button.Content hidden>+</Button.Content>
+            </Button>
+          </Menu.Item>
+        </Menu.Menu>
 
         <Menu.Menu position="right">
           <Menu.Item name={user.username} />
