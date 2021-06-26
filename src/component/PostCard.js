@@ -3,6 +3,10 @@ import { Card, Icon, Label, Button, Image } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import moment from "moment";
 
+import LikeButton from "./LikeButton";
+import EditButton from "./EditButton";
+import DeleteButton from "./DeleteButton";
+
 const PostCard = ({
   post: {
     title,
@@ -16,14 +20,10 @@ const PostCard = ({
     likes,
     comments,
   },
+  user,
+  onDelete,
+  page,
 }) => {
-  const likePost = () => {
-    console.log("like post!");
-  };
-  const commentOnPost = () => {
-    console.log("comment on post!");
-  };
-
   return (
     <Card fluid>
       <Card.Content as={Link} to={`/posts/${id}`}>
@@ -35,26 +35,17 @@ const PostCard = ({
         <Card.Header>{username}</Card.Header>
         <Card.Meta>{moment(createdAt).fromNow(true)}</Card.Meta>
         <Card.Description>
-          <p>
-            <Image src={image} size="medium" />
-          </p>
-          <p style={{ marginTop: 20 }}>
-            <strong style={{ color: "teal" }}>{title}</strong>
-            <br />
+          <Image src={image} fluid className="image-max-height" />
+
+          <div style={{ marginTop: 20 }}>
+            <h3 style={{ color: "teal" }}>{title}</h3>
             {caption}
-          </p>
+          </div>
         </Card.Description>
       </Card.Content>
       <Card.Content extra>
-        <Button as="div" labelPosition="right" onClick={likePost}>
-          <Button color="teal" basic>
-            <Icon name="heart" />
-          </Button>
-          <Label basic color="teal" pointing="left">
-            {likeCount}
-          </Label>
-        </Button>
-        <Button as="div" labelPosition="right" onClick={commentOnPost}>
+        <LikeButton post={{ id, likes, likeCount }} user={user} />
+        <Button labelPosition="right" as={Link} to={`/posts/${id}`}>
           <Button color="teal" basic>
             <Icon name="comments" />
           </Button>
@@ -62,6 +53,12 @@ const PostCard = ({
             {commentCount}
           </Label>
         </Button>
+        {user && user.username === username && (
+          <>
+            <DeleteButton postId={id} onDelete={onDelete} />
+            <EditButton postId={id} />
+          </>
+        )}
       </Card.Content>
     </Card>
   );

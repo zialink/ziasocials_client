@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useQuery } from "@apollo/client";
-import { Grid } from "semantic-ui-react";
+import { Grid, Transition } from "semantic-ui-react";
 
 import PostCard from "../PostCard";
 import { FETCH_POSTS_QUERY } from "../../util/graphql";
+import { AuthContext } from "../../context/auth";
 
 const Home = () => {
   const [postData, setPostData] = useState({});
   const { loading, error, data } = useQuery(FETCH_POSTS_QUERY);
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     data && setPostData(data);
@@ -20,14 +22,16 @@ const Home = () => {
       <Grid.Row>
         {error && <p>Error...</p>}
         {loading ? (
-          <h1>Loading Posts...</h1>
+          <h2>Loading Posts...</h2>
         ) : (
-          postData.getPosts &&
-          postData.getPosts.map((post) => (
-            <Grid.Column key={post.id} style={{ marginBottom: 20 }}>
-              <PostCard post={post} />
-            </Grid.Column>
-          ))
+          <Transition.Group>
+            {postData.getPosts &&
+              postData.getPosts.map((post) => (
+                <Grid.Column key={post.id} style={{ marginBottom: 20 }}>
+                  <PostCard post={post} user={user} />
+                </Grid.Column>
+              ))}
+          </Transition.Group>
         )}
       </Grid.Row>
     </Grid>

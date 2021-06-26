@@ -1,14 +1,15 @@
 import React, { useContext, useState } from "react";
-import { Menu, Button } from "semantic-ui-react";
+import { Menu } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
 import { AuthContext } from "../context/auth";
+import AddButton from "./AddButton";
 
 const Menubar = () => {
-  const { user, logout } = useContext(AuthContext);
   const pathname = window.location.pathname;
   const path = pathname === "/" ? "ZiaChat" : pathname.substr(1);
 
+  const { user, logout } = useContext(AuthContext);
   const [activeItem, setActiveItem] = useState(path);
 
   const handleItemClick = (e, { name }) => setActiveItem(name);
@@ -31,10 +32,7 @@ const Menubar = () => {
             as={Link}
             to="/addPost"
           >
-            <Button animated="fade" color="teal">
-              <Button.Content visible>Add Post</Button.Content>
-              <Button.Content hidden>+</Button.Content>
-            </Button>
+            <AddButton />
           </Menu.Item>
         </Menu.Menu>
 

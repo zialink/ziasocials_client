@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useMutation } from "@apollo/client";
 import { Form, Button } from "semantic-ui-react";
 import Compress from "compress.js";
@@ -9,6 +9,7 @@ import { FETCH_POSTS_QUERY, CREATE_POST } from "../../util/graphql";
 
 const AddPost = (props) => {
   const { user } = useContext(AuthContext);
+  const [errors, setErrors] = useState({});
 
   const initialState = {
     title: "",
@@ -43,8 +44,6 @@ const AddPost = (props) => {
   );
 
   const [createPost, { loading }] = useMutation(CREATE_POST, {
-    variables: values,
-
     update(cache, result) {
       const data = cache.readQuery({
         query: FETCH_POSTS_QUERY,
@@ -57,6 +56,14 @@ const AddPost = (props) => {
       });
       data && props.history.push("/");
     },
+    onError(err) {
+      setErrors(
+        err && err.graphQLErrors[0]
+          ? err.graphQLErrors[0].extensions.exception.errors
+          : {}
+      );
+    },
+    variables: values,
   });
 
   function createPostCallback() {
@@ -65,7 +72,7 @@ const AddPost = (props) => {
 
   return user ? (
     <div className="form-container">
-      <Form onSubmit={onSubmit} className={loading ? "loading" : ""}>
+      <Form onSubmit={onSubmit} noValidate className={loading ? "loading" : ""}>
         <h1 className="page-title">Create Post</h1>
         <Form.Input
           label="Title"
@@ -91,10 +98,19 @@ const AddPost = (props) => {
           onChange={(e) => fileUpload(e)}
         />
 
-        <Button type="submit" primary>
+        <Button type="submit" color="teal">
           Create Post
         </Button>
       </Form>
+      {Object.keys(errors).length > 0 && (
+        <div className="ui error message">
+          <ul className="list">
+            {Object.values(errors).map((value) => (
+              <li key={value}>{value}</li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   ) : (
     <h2>Sign in to create a post</h2>
