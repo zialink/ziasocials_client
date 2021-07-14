@@ -7,7 +7,7 @@ import AddButton from "./AddButton";
 
 const Menubar = () => {
   const pathname = window.location.pathname;
-  const path = pathname === "/" ? "ZiaChat" : pathname.substr(1);
+  const path = pathname === "/" ? "ZiaLink" : pathname.substr(1);
 
   const { user, logout } = useContext(AuthContext);
   const [activeItem, setActiveItem] = useState(path);
@@ -18,7 +18,7 @@ const Menubar = () => {
     <div>
       <Menu pointing secondary size="massive" color="teal">
         <Menu.Item
-          name="ZiaChat"
+          name="ZiaLink"
           active
           onClick={handleItemClick}
           as={Link}
@@ -46,8 +46,8 @@ const Menubar = () => {
     <div>
       <Menu pointing secondary size="massive" color="teal">
         <Menu.Item
-          name="ZiaChat"
-          active={activeItem === "ZiaChat"}
+          name="ZiaLink"
+          active={activeItem === "ZiaLink"}
           onClick={handleItemClick}
           as={Link}
           to="/"

@@ -1,43 +1,25 @@
-import React, { useState } from "react";
-import { useMutation } from "@apollo/client";
+import React from "react";
+import { Link } from "react-router-dom";
+import { Button, Icon } from "semantic-ui-react";
 
-import { Button, Icon, Confirm } from "semantic-ui-react";
-import { DELETE_POST_MUTATION, FETCH_POSTS_QUERY } from "../util/graphql";
+import ShowPopup from "./ShowPopup";
 
-function EditButton({ postId, onDelete }) {
-  const [confirmOpen, setConfirmOpen] = useState(false);
-  const [deletePost] = useMutation(DELETE_POST_MUTATION, {
-    update(cache) {
-      setConfirmOpen(false);
-      const data = cache.readQuery({
-        query: FETCH_POSTS_QUERY,
-      });
-      //data.getPosts = data.getPosts.filter((p) => p.id !== postId);
-      cache.writeQuery({
-        query: FETCH_POSTS_QUERY,
-        data: {
-          getPosts: data.getPosts.filter((p) => p.id !== postId),
-        },
-      });
+function EditButton({ postId }) {
+  //const [id, setId] = useState(null);
 
-      if (onDelete) onDelete();
-    },
-    variables: { postId },
-  });
+  //useEffect(() => setId(postId), [postId]);
   return (
     <>
-      <Button
-        color="teal"
-        className="editButton"
-        onClick={() => setConfirmOpen(true)}
-      >
-        <Icon name="edit" style={{ margin: 0 }} />
-      </Button>
-      <Confirm
-        open={confirmOpen}
-        onCancel={() => setConfirmOpen(false)}
-        onConfirm={deletePost}
-      ></Confirm>
+      <ShowPopup content="Edit Post">
+        <Button
+          color="teal"
+          className="editButton"
+          as={Link}
+          to={{ pathname: "/addPost", state: { postId: postId } }}
+        >
+          <Icon name="edit" style={{ margin: 0 }} />
+        </Button>
+      </ShowPopup>
     </>
   );
 }

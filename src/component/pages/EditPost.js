@@ -1,29 +1,15 @@
-import React, { useContext, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { useMutation, useQuery } from "@apollo/client";
+import React, { useContext, useState } from "react";
+import { useMutation } from "@apollo/client";
 import { Form, Button } from "semantic-ui-react";
 import Compress from "compress.js";
 
 import { AuthContext } from "../../context/auth";
 import { useForm } from "../../util/hooks";
-import {
-  FETCH_POSTS_QUERY,
-  FETCH_POST_QUERY,
-  CREATE_POST,
-  EDIT_POST,
-} from "../../util/graphql";
+import { FETCH_POSTS_QUERY, CREATE_POST } from "../../util/graphql";
 
-const AddPost = (props) => {
+const EditPost = (props) => {
   const { user } = useContext(AuthContext);
   const [errors, setErrors] = useState({});
-  const location = useLocation();
-  if (location.state) {
-    var { postId } = location.state;
-  }
-
-  const { data: getPost } = useQuery(FETCH_POST_QUERY, {
-    variables: { postId },
-  });
 
   const initialState = {
     title: "",
@@ -47,7 +33,6 @@ const AddPost = (props) => {
       //const imgExt = img.ext;
       //const resizedFile = Compress.convertBase64ToFile(base64str, imgExt);
       setValues({ ...values, image: base64str });
-      return base64str;
     } catch (error) {
       console.log(error);
     }
@@ -58,32 +43,18 @@ const AddPost = (props) => {
     initialState
   );
 
-  useEffect(() => {
-    if (getPost)
-      setValues({
-        title: getPost.getPost.title,
-        caption: getPost.getPost.caption,
-        image: getPost.getPost.image,
+  const [createPost, { loading }] = useMutation(CREATE_POST, {
+    update(cache, result) {
+      const data = cache.readQuery({
+        query: FETCH_POSTS_QUERY,
       });
-  }, [getPost, setValues]);
-
-  const mutation = postId ? EDIT_POST : CREATE_POST;
-
-  const [createOrEditPost, { loading }] = useMutation(mutation, {
-    refetchQueries: postId && [{ query: FETCH_POSTS_QUERY }],
-    async update(cache, result) {
-      if (!postId) {
-        const data = cache.readQuery({
-          query: FETCH_POSTS_QUERY,
-        });
-        cache.writeQuery({
-          query: FETCH_POSTS_QUERY,
-          data: {
-            getPosts: [result.data.createPost, ...data.getPosts],
-          },
-        });
-      }
-      props.history.push("/");
+      cache.writeQuery({
+        query: FETCH_POSTS_QUERY,
+        data: {
+          getPosts: [result.data.createPost, ...data.getPosts],
+        },
+      });
+      data && props.history.push("/");
     },
     onError(err) {
       setErrors(
@@ -92,17 +63,17 @@ const AddPost = (props) => {
           : {}
       );
     },
-    variables: { postId: postId, ...values },
+    variables: values,
   });
 
-  async function createPostCallback() {
-    await createOrEditPost();
+  function createPostCallback() {
+    createPost();
   }
 
   return user ? (
     <div className="form-container">
       <Form onSubmit={onSubmit} noValidate className={loading ? "loading" : ""}>
-        <h1 className="page-title">{postId ? "Edit Post" : "Create Post"}</h1>
+        <h1 className="page-title">Edit Post</h1>
         <Form.Input
           label="Title"
           placeholder="Title"
@@ -128,7 +99,7 @@ const AddPost = (props) => {
         />
 
         <Button type="submit" color="teal">
-          {postId ? "Edit Post" : "Create Post"}
+          Edit Post
         </Button>
       </Form>
       {Object.keys(errors).length > 0 && (
@@ -142,8 +113,8 @@ const AddPost = (props) => {
       )}
     </div>
   ) : (
-    <h2>Sign in to {postId ? "edit" : "create"} a post</h2>
+    <h2>Sign in to edit this post</h2>
   );
 };
 
-export default AddPost;
+export default EditPost;

@@ -56,6 +56,7 @@ export const CREATE_POST = gql`
       id
       title
       caption
+      image
       createdAt
       username
       likeCount
@@ -69,6 +70,22 @@ export const CREATE_POST = gql`
         createdAt
         body
       }
+    }
+  }
+`;
+
+export const EDIT_POST = gql`
+  mutation editPost(
+    $postId: ID!
+    $title: String!
+    $caption: String!
+    $image: String!
+  ) {
+    editPost(postId: $postId, title: $title, caption: $caption, image: $image) {
+      id
+      title
+      caption
+      image
     }
   }
 `;
@@ -105,6 +122,19 @@ export const CREATE_COMMENT_MUTATION = gql`
         createdAt
       }
       commentCount
+    }
+  }
+`;
+
+export const LIKE_POST_MUTATION = gql`
+  mutation likePost($postId: ID!) {
+    likePost(postId: $postId) {
+      id
+      likes {
+        id
+        username
+      }
+      likeCount
     }
   }
 `;

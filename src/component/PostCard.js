@@ -6,6 +6,7 @@ import moment from "moment";
 import LikeButton from "./LikeButton";
 import EditButton from "./EditButton";
 import DeleteButton from "./DeleteButton";
+import ShowPopup from "./ShowPopup";
 
 const PostCard = ({
   post: {
@@ -45,14 +46,17 @@ const PostCard = ({
       </Card.Content>
       <Card.Content extra>
         <LikeButton post={{ id, likes, likeCount }} user={user} />
-        <Button labelPosition="right" as={Link} to={`/posts/${id}`}>
-          <Button color="teal" basic>
-            <Icon name="comments" />
+        <ShowPopup content="Comment on post">
+          <Button labelPosition="right" as={Link} to={`/posts/${id}`}>
+            <Button color="teal" basic>
+              <Icon name="comments" />
+            </Button>
+            <Label basic color="blue" pointing="left">
+              {commentCount}
+            </Label>
           </Button>
-          <Label basic color="blue" pointing="left">
-            {commentCount}
-          </Label>
-        </Button>
+        </ShowPopup>
+
         {user && user.username === username && (
           <>
             <DeleteButton postId={id} onDelete={onDelete} />

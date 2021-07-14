@@ -11,6 +11,11 @@
     height: auto;
 }
 
+h1 {
+    margin: 30px;
+    padding: 20px;
+}
+
 .ui .error .message{
     margin-bottom: 20px !important;
 }

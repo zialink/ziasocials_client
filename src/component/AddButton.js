@@ -4,12 +4,14 @@ import { useRouteMatch } from "react-router";
 
 const AddButton = () => {
   let param = useRouteMatch("/posts/:postId");
+  let param1 = useRouteMatch("/addPost");
   if (param) {
     var { postId } = param.params;
   }
 
   return (
-    !postId && (
+    !postId &&
+    !param1 && (
       <Button animated="fade" color="teal">
         <Button.Content visible>Add Post</Button.Content>
         <Button.Content hidden>+</Button.Content>
