@@ -15,7 +15,7 @@ const Menubar = () => {
   const handleItemClick = (e, { name }) => setActiveItem(name);
 
   const menuBar = user ? (
-    <div>
+    <>
       <Menu pointing secondary size="massive" color="teal">
         <Menu.Item
           name="ZiaLink"
@@ -41,9 +41,9 @@ const Menubar = () => {
           <Menu.Item name="logout" onClick={logout} />
         </Menu.Menu>
       </Menu>
-    </div>
+    </>
   ) : (
-    <div>
+    <>
       <Menu pointing secondary size="massive" color="teal">
         <Menu.Item
           name="ZiaLink"
@@ -70,7 +70,7 @@ const Menubar = () => {
           />
         </Menu.Menu>
       </Menu>
-    </div>
+    </>
   );
 
   return menuBar;
