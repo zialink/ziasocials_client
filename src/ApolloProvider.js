@@ -12,7 +12,7 @@ import App from "./App";
 //const URI = "http://localhost:4000";
 
 const httpLink = createHttpLink({
-  uri: "http://localhost:4000",
+  uri: "https://ziasocials.herokuapp.com/",
   credentials: "include",
 });
 
