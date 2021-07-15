@@ -28,7 +28,7 @@ function SinglePost(props) {
     <Grid>
       <Grid.Row centered>
         <Transition animation="fade up" duration={500}>
-          <Grid.Column width={8} style={{ margin: 20 }}>
+          <Grid.Column centered style={{ margin: 20 }}>
             {postData.getPost && (
               <>
                 <PostCard
