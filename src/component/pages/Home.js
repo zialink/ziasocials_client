@@ -17,7 +17,7 @@ const Home = () => {
 
   return (
     <div>
-      <Grid columns={3} stackable>
+      <Grid columns={3} stackable width={8} style={{ margin: 20 }}>
         <Grid.Row className="page-title">
           <h1>Recent Posts</h1>
         </Grid.Row>
